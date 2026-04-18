@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva de Turnos - Glamour Peluquería</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <main class="container">
+        <header>
+            <h1>Glamour <span>Studio</span></h1>
+            <p>Reserva tu momento de belleza</p>
+        </header>
+
+        <section class="booking-section">
+            <div class="date-picker-container">
+                <label for="date-select">Selecciona el Día:</label>
+                <input type="date" id="date-select" min="">
+            </div>
+
+            <div class="hours-container">
+                <h3>Horarios Disponibles</h3>
+                <div id="time-slots" class="time-slots">
+                    <!-- Los turnos se generarán por JS -->
+                    <p class="placeholder-text">Selecciona una fecha para ver los turnos disponibles.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal para reservar -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Confirmar Turno</h2>
+            <p id="modal-date-time"></p>
+            <form id="booking-form">
+                <div class="input-group">
+                    <label for="client-name">Tu Nombre y Apellido:</label>
+                    <input type="text" id="client-name" required placeholder="Ej. Ana Pérez">
+                </div>
+                <input type="hidden" id="hidden-date">
+                <input type="hidden" id="hidden-time">
+                <button type="submit" class="btn-primary">Reservar Turno</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notificación Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
