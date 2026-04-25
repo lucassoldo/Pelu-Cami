@@ -13,10 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const today = new Date().toISOString().split('T')[0];
     dateSelect.min = today;
 
-    // Horarios de la peluquería (9:00 a 18:00)
+    // Horarios de la peluquería (8:00 a 18:00 cada media hora)
     const storeHours = [
-        "09:00", "10:00", "11:00", "12:00", "13:00", 
-        "14:00", "15:00", "16:00", "17:00", "18:00"
+        "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
+        "11:00", "11:30", "12:00", "12:30", "13:00", "13:30",
+        "14:00", "14:30", "15:00", "15:30", "16:00", "16:30",
+        "17:00", "17:30", "18:00"
     ];
 
     // Evento al seleccionar una fecha
@@ -33,12 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadAppointments(date) {
         try {
             timeSlotsContainer.innerHTML = '<p class="placeholder-text">Cargando horarios...</p>';
-            
+
             // Obtener turnos reservados desde el backend
             const response = await fetch(`/api/appointments?date=${date}`);
             if (!response.ok) throw new Error('Error al obtener turnos');
             const bookedAppointments = await response.json();
-            
+
             // Mapear horas reservadas para fácil búsqueda
             const bookedTimes = bookedAppointments.map(app => app.time);
 
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Generar botones de horarios
             storeHours.forEach(time => {
                 const isBooked = bookedTimes.includes(time);
-                
+
                 // Si la fecha es hoy, deshabilitar horas pasadas (opcional, para ser precisos)
                 const isPast = isPastTime(date, time);
 
@@ -57,8 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (isBooked || isPast) {
                     slot.classList.add('booked');
-                    if(isPast && !isBooked) slot.title = "Horario pasado";
-                    if(isBooked) slot.title = "Turno ocupado";
+                    if (isPast && !isBooked) slot.title = "Horario pasado";
+                    if (isBooked) slot.title = "Turno ocupado";
                 } else {
                     slot.addEventListener('click', () => openModal(date, time));
                 }
@@ -76,16 +78,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Comprueba si una hora ya pasó hoy
     function isPastTime(selectedDate, timeStr) {
         if (selectedDate !== today) return false;
-        
+
         const now = new Date();
         const currentHour = now.getHours();
         const currentMinute = now.getMinutes();
-        
+
         const [slotHour, slotMinute] = timeStr.split(':').map(Number);
-        
+
         if (slotHour < currentHour) return true;
         if (slotHour === currentHour && slotMinute <= currentMinute) return true;
-        
+
         return false;
     }
 
@@ -100,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hiddenDate.value = date;
         hiddenTime.value = time;
         document.getElementById('client-name').value = '';
-        
+
         modal.classList.add('show');
     }
 
@@ -117,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Enviar formulario de reserva
     bookingForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const clientName = document.getElementById('client-name').value.trim();
         const date = hiddenDate.value;
         const time = hiddenTime.value;
@@ -161,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function showToast(message, type) {
         toast.textContent = message;
         toast.className = `toast show ${type}`;
-        
+
         clearTimeout(toastTimeout);
         toastTimeout = setTimeout(() => {
             toast.classList.remove('show');
